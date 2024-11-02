@@ -1,77 +1,97 @@
-"use client";
-
 import React from 'react';
 import { Package2 } from 'lucide-react';
-// Importa la imagen directamente
-import fondoImage from '../images/fondo.jpeg';
-import imagen from '../images/imagen.jpeg';
-import logo from '../images/logo.png';
 import Image from 'next/image';
+import Link from 'next/link';
+import fondoImage from '../images/fondo.jpeg';
+import logo from '../images/logo.png';
 
 const WelcomeInterface = () => {
   return (
     <div className="relative min-h-screen">
-      {/* Background Image */}
+      {/* Background Image with blur */}
       <Image
         src={fondoImage}
         alt="Background"
         fill
-        className="object-cover z-0"
+        className="object-cover z-0 filter" // Apply blur here
         priority
         quality={100}
       />
 
       {/* Gradient Overlay */}
-      <div 
-        className="absolute inset-0 z-10 bg-gradient-to-br from-gray-100/40 to-orange-700/90"
-      />
+      <div className="absolute inset-0 z-10 bg-gradient-to-br from-gray-900/80 to-gray-700/95 " />
 
       {/* Content */}
       <div className="relative z-20 min-h-screen p-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <header className="flex justify-between items-center mb-20">
-            <div className="w-20 h-20 backdrop-blur-sm rounded-full overflow-hidden flex items-center justify-center">
-              <Image
-                src={logo}
-                alt="Logo"
-                fill
-                className="object-cover rounded-full"
-                priority
-                quality={100}
-              />
+            {/* Center Logo */}
+            <div className="flex-1" /> {/* Spacer */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                <Image
+                  src={logo}
+                  alt="Logo"
+                  fill
+                  className="object-contain p-2"
+                  priority
+                  quality={100}
+                />
+              </div>
+              {/* Underline with shadow */}
+              <div className="h-0.5 w-72 bg-white mt-4 shadow-md" /> {/* Adjust width for longer line */}
             </div>
-            <button 
-              className="px-4 py-2 rounded-md backdrop-blur-sm text-white font-bold transition-colors hover:bg-gradient-to-br from-gray-300/40 to-gray-900/90 hover:text-white"
-            >
-              Iniciar Sesión
-            </button>
+            <div className="flex-1 flex justify-end"> {/* Right-aligned container */}
+              <Link href="/login">
+                <button className="px-6 py-2 text-white border-2 border-white rounded-md hover:bg-white/10 transition-colors">
+                  Iniciar Sesión
+                </button>
+              </Link>
+            </div>
           </header>
 
           {/* Main Content */}
-          <div className="flex flex-col md:flex-row items-center gap-16">
-            {/* Left Circle with Illustration */}
-            <div className="w-96 h-96 md:w-80 md:h-80 bg-white/95 backdrop-blur-sm rounded-full overflow-hidden flex items-center justify-center p-8 shadow-lg">
-              <Image
-                src={imagen}
-                alt="Worker"
-                fill
-                className="object-cover rounded-full"
-                priority
-                quality={100}
-              />
-            </div>
+          <div className="flex flex-col md:flex-row items-center gap-16 mt-12">
+{/* Left Side - Illustration */}
+<div className="relative w-full md:w-1/2">
+  <div className="w-full aspect-square relative">
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative w-96 h-96"> {/* Contenedor que coincide con las dimensiones de la imagen */}
+        <div className="absolute inset-0 border-4 border-white shadow-[0_0_10px_10px_white] rounded-lg"> {/* Se eliminó el borde redondeado */}
+          {/* El borde ahora tiene una forma cuadrada o rectangular con sombra blanca */}
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          {/* Inventory Illustration */}
+          <div className="relative w-64 h-64"> {/* Mantén esta clase o ajusta según la imagen */}
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="object-contain p-2"
+              priority
+              quality={100}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-            {/* Right Text Content */}
+
+
+
+            {/* Right Side - Text Content */}
             <div className="md:w-1/2 text-left">
-              <h1 className="text-4xl md:text-4xl font-bold text-white mb-6">
-                CONTROL DE PRODUCCIÓN Y EMPAQUETADO
-              </h1>
-              <p className="text-lg text-gray-100 leading-relaxed">
-                La producción implica la planificación y ejecución de tareas para transformar 
-                materias primas en productos finales, optimizando recursos y tiempo. El 
-                empaquetado, por su parte, protege los productos, facilita su manejo y les da 
-                valor agregado al mejorar su presentaciónnnn.
+              <h2 className="text-4xl font-bold text-white mb-6">
+                Control y Gestión de Inventario
+              </h2>
+              <p className="text-lg text-gray-200 leading-relaxed">
+                Nuestro sistema de control de inventario optimiza la gestión de tus productos mediante
+                un seguimiento preciso y en tiempo real de las existencias. Olvídate de problemas de sobrestock
+                o desabastecimiento: nuestro sistema automatiza las entradas y salidas, reduciendo errores y
+                asegurando una base de datos siempre actualizada.
               </p>
             </div>
           </div>
@@ -79,6 +99,6 @@ const WelcomeInterface = () => {
       </div>
     </div>
   );
-}
+};
 
 export default WelcomeInterface;
