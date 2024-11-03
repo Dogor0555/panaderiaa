@@ -57,13 +57,16 @@ const WelcomeInterface = () => {
 <div className="relative w-full md:w-1/2">
   <div className="w-full aspect-square relative">
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="relative w-96 h-96"> {/* Contenedor que coincide con las dimensiones de la imagen */}
-        <div className="absolute inset-0 border-4 border-white shadow-[0_0_10px_10px_white] rounded-lg"> {/* Se eliminó el borde redondeado */}
-          {/* El borde ahora tiene una forma cuadrada o rectangular con sombra blanca */}
-        </div>
+      <div className="relative w-96 h-96">
+        
+        {/* Círculo desenfocado de fondo */}
         <div className="absolute inset-0 flex items-center justify-center">
-          {/* Inventory Illustration */}
-          <div className="relative w-64 h-64"> {/* Mantén esta clase o ajusta según la imagen */}
+          <div className="w-96 h-96 rounded-full bg-white opacity-30 blur-[100px]"></div>
+        </div>
+        
+        {/* Inventory Illustration */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-64 h-64">
             <Image
               src={logo}
               alt="Logo"
