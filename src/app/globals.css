@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -24,4 +26,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+@font-face {
+  font-family: 'Better Together Script';
+  src: url('./fonts/Better_Together_Script.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-better-together {
+  font-family: 'Better Together Script', cursive;
+  font-weight: normal;
 }
