@@ -88,7 +88,7 @@ const WelcomeInterface = () => {
             {/* Right Side - Text Content */}
             <div className="md:w-1/2 text-left">
               <h2 className="text-4xl font-bold text-white mb-6">
-                Control y Gestión de Inventario
+                Control y Gestión de Inventario - Esto es una pruebaaaa
               </h2>
               <p className="text-lg text-gray-200 leading-relaxed">
                 Nuestro sistema de control de inventario optimiza la gestión de tus productos mediante
