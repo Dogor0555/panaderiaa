@@ -21,7 +21,6 @@ const SliderCards = () => {
       description:
         "Nuestro sistema de control de producción te permite optimizar cada etapa del proceso productivo, asegurando una gestión eficiente y en tiempo real. Desde la planificación de materiales hasta el seguimiento del progreso de cada lote, el sistema facilita la supervisión detallada de cada fase de producción.",
     },
-    // Agrega más slides aquí según necesites
   ];
 
   const totalSlides = Math.ceil(slides.length / 2);
@@ -39,7 +38,7 @@ const SliderCards = () => {
       {/* Background image */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src={fondoImage} // Cambia esto a la ruta de tu imagen de fondo
+          src={fondoImage}
           alt="Background image"
           layout="fill"
           objectFit="cover"
