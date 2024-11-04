@@ -1,0 +1,19 @@
+Contenido del slide de funcionalidades
+
+Gestión de ventas: 
+Nuestro sistema de control de ventas te permite gestionar y optimizar cada transacción de manera ágil y precisa.
+El sistema facilita el seguimiento en tiempo real de cada venta, automatiza el registro de datos y genera reportes personalizados para ayudarte a tomar decisiones estratégicas que impulsan el crecimiento de tu negocio.
+
+Gestión de usuarios: 
+Nuestro sistema de gestión de usuarios simplifica y potencia la administración de perfiles, accesos y permisos dentro de tu negocio. Con una interfaz intuitiva y controles de seguridad avanzados, podrás definir roles específicos, asignar niveles de acceso personalizados y supervisar la actividad de cada usuario en tiempo real.
+
+Control de inventario: 
+Nuestro sistema de control de inventario optimiza la gestión de tus productos mediante un seguimiento preciso y en tiempo real de las existencias. Olvídate de problemas de sobre stock o desabastecimiento: nuestro sistema automatiza las entradas y salidas, reduciendo errores y asegurando una base de datos siempre actualizada.
+
+Control de producción: Nuestro sistema de control de producción te permite optimizar cada etapa del proceso productivo, asegurando una gestión eficiente y en tiempo real. Desde la planificación de materiales hasta el seguimiento del progreso de cada lote, el sistema facilita la supervisión detallada de cada fase de producción. 
+
+Gestión de compras: Nuestro sistema de gestión de compras facilita y optimiza cada etapa del proceso, desde la planificación de órdenes hasta el seguimiento de entregas. Con un control centralizado de proveedores, podrás evaluar el rendimiento de cada uno, negociar mejores precios y programar pedidos automáticamente según tus necesidades de inventario.
+
+Gestión de clientes: Con la funcionalidad de gestión de clientes, podrás centralizar toda la información relevante sobre tus clientes en un solo lugar. Desde su historial de compras hasta sus preferencias y datos de contacto, el sistema te ayuda a personalizar la atención y crear estrategias de fidelización efectivas.
+
+
