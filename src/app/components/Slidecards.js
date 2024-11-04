@@ -1,25 +1,53 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { IoIosArrowUp } from 'react-icons/io';
 import fondoImage from '../images/fondo4.png';
+import vectorVentasSlide from '../images/VectorVentas-Slide.png';
+import vectorUsersSlide from '../images/VectorUsers-Slide.png';
+import vectorInventarioSlide from '../images/VectorInventario-Slide.png';
+import vectorProduccionSlide from '../images/VectorProduccion-Slide.png';
+import vectorComprasSlide from '../images/VectorCompras-Slide.png';
+import vectorClientesSlide from '../images/VectorClientes-Slide.png';
 
-const SliderCards = () => {
+const SliderCards = ({ scrollToTop }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      title: "Control de Inventario",
+      title: "Gestión de ventas",
       description:
-        "Nuestro sistema de control de inventario optimiza la gestión de tus productos mediante un seguimiento preciso y en tiempo real de las existencias. Olvídate de problemas de sobrestock o desabastecimiento: nuestro sistema automatiza las entradas y salidas, reduciendo errores y asegurando una base de datos siempre actualizada.",
+        "Nuestro sistema de control de ventas te permite gestionar y optimizar cada transacción de manera ágil y precisa, ayudando a mantener un registro detallado de tus ventas y a mejorar la relación con tus clientes, incrementando la eficiencia y precisión de cada operación.",
+      image: vectorVentasSlide,
     },
     {
-      title: "Control de Producción",
+      title: "Gestión de usuarios",
       description:
-        "Nuestro sistema de control de producción te permite optimizar cada etapa del proceso productivo, asegurando una gestión eficiente y en tiempo real. Desde la planificación de materiales hasta el seguimiento del progreso de cada lote, el sistema facilita la supervisión detallada de cada fase de producción.",
+        "Nuestro sistema de gestión de usuarios simplifica y potencia la administración de perfiles, roles y permisos, ofreciendo una experiencia personalizada y segura para cada usuario dentro de la organización, promoviendo el control y la seguridad en el acceso a la información.",
+      image: vectorUsersSlide,
     },
     {
-      title: "Control de Usuario",
+      title: "Control de inventario",
       description:
-        "Nuestro sistema de control de producción te permite optimizar cada etapa del proceso productivo, asegurando una gestión eficiente y en tiempo real. Desde la planificación de materiales hasta el seguimiento del progreso de cada lote, el sistema facilita la supervisión detallada de cada fase de producción.",
+        "Nuestro sistema de control de inventario optimiza la gestión de tus productos, permitiendo un seguimiento en tiempo real de las existencias, movimientos y necesidades de reposición, ayudando a reducir costos y mejorar la disponibilidad de productos.",
+      image: vectorInventarioSlide,
+    },
+    {
+      title: "Control de producción",
+      description:
+        "Nuestro sistema de control de producción te permite optimizar cada etapa del proceso productivo, asegurando un flujo constante y eficiente de materiales y recursos, mejorando la planificación y reduciendo los tiempos de entrega.",
+      image: vectorProduccionSlide,
+    },
+    {
+      title: "Gestión de compras",
+      description:
+        "Nuestro sistema de gestión de compras facilita y optimiza cada etapa del proceso, desde la solicitud hasta la recepción, garantizando un control exhaustivo de proveedores y órdenes, y ayudando a negociar mejores condiciones y precios.",
+      image: vectorComprasSlide,
+    },
+    {
+      title: "Gestión de clientes",
+      description:
+        "Con la funcionalidad de gestión de clientes, podrás centralizar toda la información relevante de tus clientes, permitiendo un seguimiento detallado de cada interacción, optimizando la fidelización y mejorando la experiencia del cliente.",
+      image: vectorClientesSlide,
     },
   ];
 
@@ -34,8 +62,8 @@ const SliderCards = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-gray-100">
-      {/* Background image */}
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-gray-100 overflow-hidden">
+      {/* Imagen de fondo */}
       <div className="absolute inset-0 w-full h-full">
         <Image
           src={fondoImage}
@@ -46,41 +74,51 @@ const SliderCards = () => {
         />
       </div>
 
-      {/* Slider container */}
-      <div className="relative w-full max-w-6xl mx-auto px-4 py-12">
-        <div className="relative overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {Array.from({ length: totalSlides }, (_, index) => (
-              <div key={index} className="flex w-full flex-shrink-0 px-4">
-                {slides.slice(index * 2, index * 2 + 2).map((slide, idx) => (
+      {/* Contenedor del Slider */}
+      <div className="relative w-full max-w-7xl mx-auto px-4 py-16 overflow-hidden">
+        <div
+          className="relative flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {Array.from({ length: totalSlides }, (_, index) => (
+            <div key={index} className="flex w-full flex-shrink-0">
+              {slides.slice(index * 2, index * 2 + 2).map((slide, idx) => (
+                <div
+                  key={idx}
+                  className="w-1/2 px-4 flex items-center justify-center relative"
+                >
                   <div
-                    key={idx}
-                    className="w-1/2 px-4 flex items-center justify-center"
+                    className="bg-white rounded-2xl p-10 pt-24 shadow-lg text-center w-full max-w-lg flex flex-col justify-between relative overflow-visible"
+                    style={{ minHeight: '420px' }}
                   >
-                    <div className="bg-white rounded-2xl p-8 shadow-lg text-center max-w-sm">
-                      <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-6">
-                        {/* Aquí puede ir la imagen o ícono de cada slide */}
-                      </div>
-                      <h3 className="text-3xl text-black font-bold mb-4">{slide.title}</h3>
-                      <p className="text-black">{slide.description}</p>
+                    <div className="absolute top-[-60px] left-1/2 transform -translate-x-1/2 z-10 shadow-xl rounded-full">
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        width={200}
+                        height={200}
+                        layout="intrinsic"
+                        className="object-contain"
+                      />
                     </div>
+                    <h3 className="text-3xl text-black font-bold mt-24 mb-4">
+                      {slide.title}
+                    </h3>
+                    <p className="text-gray-700">{slide.description}</p>
                   </div>
-                ))}
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
 
         {/* Botones de navegación */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black p-2 rounded-full shadow-lg hover:bg-gray-500 transition-colors"
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black p-3 rounded-full shadow-lg hover:bg-gray-500 transition-colors z-20"
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -91,16 +129,24 @@ const SliderCards = () => {
 
         <button
           onClick={nextSlide}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black p-2 rounded-full shadow-lg hover:bg-gray-500 transition-colors"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black p-3 rounded-full shadow-lg hover:bg-gray-500 transition-colors z-20"
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
+        </button>
+
+        {/* Botón de Flecha hacia Arriba */}
+        <button
+          onClick={scrollToTop}
+          className="absolute bottom-10 right-1/2 transform translate-x-1/2 bg-black p-3 rounded-full shadow-lg hover:bg-gray-500 transition-colors z-20"
+        >
+          <IoIosArrowUp className="w-6 h-6 text-white" />
         </button>
       </div>
     </div>
