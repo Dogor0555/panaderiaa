@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import logo from '../../images/VectorPan-Login.png';
 import fondoImage from '../../images/FondoLogin.png';
+import Loader from '../Loader'; // Asegúrate de la ruta correcta
 
 const Login = () => {
   const router = useRouter();
@@ -48,6 +49,11 @@ const Login = () => {
   const handleRegisterRedirect = () => {
     router.push('/components/Register');
   };
+
+  // Si está cargando, muestra el componente de carga
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
@@ -107,12 +113,12 @@ const Login = () => {
             />
           </div>
           <button
-  type="submit"
-  disabled={isLoading}
-  className={`w-full bg-black hover:bg-yellow-600 text-white font-bold py-2 text-lg rounded-full transition duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
->
-  {isLoading ? 'Procesando...' : 'Entrar'}
-</button>
+            type="submit"
+            disabled={isLoading}
+            className={`w-full bg-black hover:bg-yellow-600 text-white font-bold py-2 text-lg rounded-full transition duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+          >
+            {isLoading ? 'Procesando...' : 'Entrar'}
+          </button>
         </form>
 
         {/* Enlaces adicionales */}
