@@ -58,8 +58,8 @@ const WelcomeInterface = ({ scrollToSlider }) => {
     Conoce
   </h1>
   <h1 className="text-4xl md:text-[100px] leading-tight text-white mb-4 md:mb-8 font-better-together">
-    Nuestra Panadería
-  </h1>
+    Nuestras Funcioness
+  </h1>   
   <div className="flex flex-col items-center space-y-2 md:space-y-0 md:flex-row md:space-x-2">
     <IoIosArrowDown
       className="w-12 h-12 md:w-16 md:h-16 text-white animate-bounce cursor-pointer"
