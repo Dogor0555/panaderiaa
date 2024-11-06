@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { IoIosArrowUp } from 'react-icons/io';
-import { motion } from 'framer-motion'; // Importa Framer Motion
+import { motion, useAnimation } from 'framer-motion';
 import fondoImage from '../images/fondo4.png';
 import vectorVentasSlide from '../images/VectorVentas-Slide.png';
 import vectorUsersSlide from '../images/VectorUsers-Slide.png';
@@ -13,7 +13,8 @@ import vectorClientesSlide from '../images/VectorClientes-Slide.png';
 const SliderCards = ({ scrollToTop }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  
+  const cardControls = useAnimation();
+
   const slides = [
     { title: "Gestión de ventas", description: "Nuestro sistema de control de ventas te permite gestionar y optimizar cada transacción de manera ágil y precisa, ayudando a mantener un registro detallado de tus ventas y a mejorar la relación con tus clientes, incrementando la eficiencia y precisión de cada operación.", image: vectorVentasSlide },
     { title: "Gestión de usuarios", description: "Nuestro sistema de gestión de usuarios simplifica y potencia la administración de perfiles, roles y permisos, ofreciendo una experiencia personalizada y segura para cada usuario dentro de la organización, promoviendo el control y la seguridad en el acceso a la información.", image: vectorUsersSlide },
@@ -30,6 +31,14 @@ const SliderCards = ({ scrollToTop }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Configura la animación en bucle para las imágenes
+  useEffect(() => {
+    const animation = async () => {
+      await cardControls.start({ scale: 1.05, transition: { duration: 3, repeat: Infinity, repeatType: 'reverse' } });
+    };
+    animation();
+  }, [cardControls]);
 
   const totalSlides = Math.ceil(slides.length / (isMobile ? 1 : 2));
 
@@ -73,14 +82,16 @@ const SliderCards = ({ scrollToTop }) => {
                     style={{ minHeight: isMobile ? '280px' : '420px' }}
                   >
                     <div className="absolute top-[-40px] md:top-[-60px] left-1/2 transform -translate-x-1/2 z-10 shadow-xl rounded-full">
-                      <Image
-                        src={slide.image}
-                        alt={slide.title}
-                        width={isMobile ? 120 : 200}
-                        height={isMobile ? 120 : 200}
-                        layout="intrinsic"
-                        className="object-contain"
-                      />
+                      <motion.div animate={cardControls}>
+                        <Image
+                          src={slide.image}
+                          alt={slide.title}
+                          width={isMobile ? 120 : 200}
+                          height={isMobile ? 120 : 200}
+                          layout="intrinsic"
+                          className="object-contain"
+                        />
+                      </motion.div>
                     </div>
                     <h3 className="text-2xl md:text-3xl text-black font-bold mt-14 md:mt-24 mb-4">
                       {slide.title}
