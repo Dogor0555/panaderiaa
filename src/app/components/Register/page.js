@@ -1,150 +1,153 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import logo from '../../images/logo.png';
-import backgroundImage from '../../images/fondo3.jpg';
-import loginBackground from '../../images/login.png';
+import logo from '../../images/VectorPan-Login.png';
+import fondoImage from '../../images/FondoLogin.png';
+import Loader from '../Loader';
 
 const Register = () => {
-    const router = useRouter();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [roles, setRoles] = useState([]);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        setError('');
-        setSuccess(false);
-        setIsLoading(true);
-
-        if (password !== confirmPassword) {
-            setError('Las contraseñas no coinciden');
-            setIsLoading(false);
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:8080/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            const data = await response.text();
-
-            if (response.ok) {
-                setSuccess(true);
-                setTimeout(() => {
-                    router.push('/components/Login');
-                }, 1000);
-            } else {
-                setError(data || 'Error al registrar el usuario');
-            }
-        } catch (error) {
-            setError('Ocurrió un error. Por favor, intenta de nuevo.');
-        } finally {
-            setIsLoading(false);
-        }
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/auth/roles');
+        const data = await response.json();
+        setRoles(data);
+      } catch (error) {
+        setError('Error al cargar los roles');
+      }
     };
+    fetchRoles();
+  }, []);
 
-    return (
-        <div className="relative flex justify-center items-center h-screen">
-            {/* Background Image */}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess(false);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            nombreUsuario: username,
+            contrasena: password,
+            rol: { idRol: role }
+          })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al crear el usuario');
+      }
+
+      setSuccess(true);
+      setTimeout(() => {
+        router.push('/components/Login');
+      }, 1000);
+    } catch (error) {
+      setError(error.message || 'Ocurrió un error al intentar registrar el usuario');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="absolute inset-0">
+        <Image
+          src={fondoImage}
+          alt="Fondo"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
+      </div>
+  
+      <div className="relative z-20 top-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
+        <div className="relative w-full mb-10">
+          <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 z-10 w-48 h-48">
             <Image
-                src={backgroundImage}
-                alt="Background"
-                fill
-                className="object-cover z-0"
-                priority
-                quality={100}
+              src={logo}
+              alt="Logo sobresaliente"
+              layout="fill"
+              objectFit="contain"
+              className="shadow-xl"
             />
-
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 z-10 bg-gradient-to-br from-brown-900/60 to-brown-500/80" />
-
-            {/* Register Container with Background Image */}
-            <div
-                className="relative z-20 rounded-lg shadow-md w-full max-w-5xl flex overflow-hidden"
-                style={{
-                    backgroundImage: `url(${loginBackground.src})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
-            >
-                {/* Logo Section */}
-                <div className="w-1/2 flex justify-center items-center p-10">
-                    <Image src={logo} alt="Pan Comido" width={300} height={300} quality={100} />
-                </div>
-
-                {/* Register Form Section */}
-                <div className="w-1/2 p-10 pl-20 flex flex-col justify-center">
-                    <h2 className="text-4xl font-bold text-center text-[#A22D03] mb-8">Registrarse</h2>
-                    {error && <p className="text-red-500 text-center mb-4 text-lg">{error}</p>}
-                    {success && <p className="text-green-500 text-center mb-4 text-lg">¡Registro exitoso!</p>}
-                    <form onSubmit={handleRegister}>
-                        <div className="mb-6">
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Usuario"
-                                disabled={isLoading}
-                                required
-                                className="w-full p-4 border border-brown-300 rounded-lg text-xl font-bold text-[#A22D03] focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Contraseña"
-                                disabled={isLoading}
-                                required
-                                className="w-full p-4 border border-brown-300 rounded-lg text-xl font-bold text-[#A22D03] focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <input
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Confirmar Contraseña"
-                                disabled={isLoading}
-                                required
-                                className="w-full p-4 border border-brown-300 rounded-lg text-xl font-bold text-[#A22D03] focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className={`w-full bg-[#A22D03] hover:bg-yellow-600 text-white font-bold py-4 text-xl rounded-lg transition duration-200 ${
-                                isLoading ? 'opacity-70 cursor-not-allowed' : ''
-                            }`}
-                        >
-                            {isLoading ? 'Procesando...' : 'Registrarse'}
-                        </button>
-                    </form>
-
-                    
-<div className="flex justify-center mt-4 text-sm space-x-4">
-  <a 
-    onClick={() => router.push('/components/Login')} // Cambiar a Login
-    className="text-[#A22D03] hover:underline cursor-pointer"
-  >
-    ¿Ya tienes una cuenta? Inicia sesión
-  </a>
-</div>
-                </div>
-            </div>
+          </div>
         </div>
-    );
+  
+        <h2 className="text-3xl font-bold mb-6 text-black mt-24">Registro de Usuario</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {success && <p className="text-green-500 mb-4">¡Registro exitoso!</p>}
+  
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-center text-black font-bold mb-1">Usuario</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="w-full p-4 border border-brown-300 rounded-lg bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-center text-black font-bold mb-1">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full p-4 border border-brown-300 rounded-lg bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="role" className="block text-center text-black font-bold mb-1">Rol</label>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+              className="w-full p-4 border border-brown-300 rounded-lg bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-[#A22D03]"
+            >
+              <option value="">Seleccione un rol</option>
+              {roles.map((r) => (
+                <option key={r.idRol} value={r.idRol}>
+                  {r.nombreRol}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-black hover:bg-yellow-600 text-white font-bold py-2 text-lg rounded-full transition duration-200"
+          >
+            Registrarse
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default Register;

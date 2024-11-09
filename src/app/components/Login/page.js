@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import logo from '../../images/VectorPan-Login.png';
 import fondoImage from '../../images/FondoLogin.png';
-import Loader from '../Loader'; // Asegúrate de la ruta correcta
+import Loader from '../Loader';
 
 const Login = () => {
   const router = useRouter();
@@ -13,6 +13,9 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,22 +28,38 @@ const Login = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify({ username, password }),
+        credentials: 'include',
+        body: JSON.stringify({ username, password })
       });
 
-      const data = await response.text();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error en el inicio de sesión');
+      }
 
-      if (response.ok) {
-        setSuccess(true);
+      const data = await response.json();
+      setSuccess(true);
+
+      // Guardar el rol en localStorage o en un estado global
+      if (data.role) {
+        localStorage.setItem('userRole', data.role);
+
+        // Redirigir según el rol
         setTimeout(() => {
-          router.push('/components/dashboard');
+          if (data.role === "Administrador") {
+            router.push('/components/admin-dashboard');
+          } else if (data.role === "Vendedor") {
+            router.push('/components/user-dashboard');
+          }
         }, 1000);
       } else {
-        setError(data || 'Credenciales inválidas');
+        throw new Error('Rol no encontrado');
       }
+
     } catch (error) {
-      setError('Ocurrió un error. Por favor, intenta de nuevo.');
+      setError(error.message || 'Ocurrió un error al intentar iniciar sesión');
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +88,7 @@ const Login = () => {
       </div>
 
       {/* Contenedor del Login */}
-      <div className="relative z-20  top-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
+      <div className="relative z-20 top-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
         {/* Contenedor para el logo sobresaliente */}
         <div className="relative w-full mb-10">
           <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 z-10 w-48 h-48">
@@ -78,7 +97,7 @@ const Login = () => {
               alt="Logo sobresaliente"
               layout="fill"
               objectFit="contain"
-              className="shadow-xl" // Sin redondez
+              className="shadow-xl"
             />
           </div>
         </div>
