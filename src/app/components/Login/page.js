@@ -14,9 +14,6 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -75,9 +72,9 @@ const Login = () => {
   }
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="relative flex items-center justify-center min-h-screen bg-gray-100 overflow-hidden">
       {/* Imagen de fondo */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         <Image
           src={fondoImage}
           alt="Fondo"
@@ -88,10 +85,10 @@ const Login = () => {
       </div>
 
       {/* Contenedor del Login */}
-      <div className="relative z-20 top-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
-        {/* Contenedor para el logo sobresaliente */}
-        <div className="relative w-full mb-10">
-          <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 z-10 w-48 h-48">
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
+        {/* Logo sobresaliente */}
+        <div className="relative mb-10">
+          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-10 w-24 h-24">
             <Image
               src={logo}
               alt="Logo sobresaliente"
@@ -102,7 +99,7 @@ const Login = () => {
           </div>
         </div>
 
-        <h2 className="text-3xl font-bold mb-6 text-black mt-24">Iniciar Sesión</h2>
+        <h2 className="text-3xl font-bold mb-6 text-black mt-20">Iniciar Sesión</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">¡Login exitoso!</p>}
 
