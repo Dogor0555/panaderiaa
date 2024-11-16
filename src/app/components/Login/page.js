@@ -49,9 +49,9 @@ const Login = () => {
         // Redirigir según el rol
         setTimeout(() => {
           if (data.role === "Administrador") {
-            router.push('/components/admin-dashboard');
+            router.push('/components/dashboard');
           } else if (data.role === "Vendedor") {
-            router.push('/components/user-dashboard');
+            router.push('/components/dashboard');
           }
         }, 1000);
       } else {

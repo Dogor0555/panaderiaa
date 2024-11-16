@@ -43,10 +43,10 @@ const Register = () => {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-            nombreUsuario: username,
-            contrasena: password,
-            rol: { idRol: role }
-          })
+          nombreUsuario: username,
+          contrasena: password,
+          rol: { idRol: role }
+        })
       });
 
       if (!response.ok) {
@@ -80,24 +80,24 @@ const Register = () => {
           objectPosition="center"
         />
       </div>
-  
+
       <div className="relative z-20 top-10 max-w-md w-full bg-white rounded-2xl p-10 shadow-lg text-center">
         <div className="relative w-full mb-10">
-          <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 z-10 w-48 h-48">
+          <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 z-10 w-48 h-48 hover:scale-105 hover:rotate-2 transition-all duration-500">
             <Image
               src={logo}
               alt="Logo sobresaliente"
               layout="fill"
               objectFit="contain"
-              className="shadow-xl"
+              className="shadow-xl transition-transform duration-500 ease-in-out"
             />
           </div>
         </div>
-  
+
         <h2 className="text-3xl font-bold mb-6 text-black mt-24">Registro de Usuario</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">¡Registro exitoso!</p>}
-  
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-center text-black font-bold mb-1">Usuario</label>

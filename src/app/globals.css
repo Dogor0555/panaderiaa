@@ -41,3 +41,18 @@ body {
   font-family: 'Better Together Script', cursive;
   font-weight: normal;
 }
+
+
+@keyframes subtle-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 2s ease-in-out infinite;
+}
+
