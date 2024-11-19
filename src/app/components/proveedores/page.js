@@ -351,9 +351,9 @@ const Providers = () => {
             axios
                 .delete(`http://localhost:8080/api/auth/proveedores/${providerToDelete.id}`)
                 .then((response) => {
-                    setProviders(providers.filter(providers => provider.idProveedor !== providerToDelete.id));
-                    setDeleteModalOpen(false);
-                    setProviderToDelete(null);
+                    setProviders(providers.filter(provider => provider.idProveedor !== providerToDelete.id));
+                    setDeleteModalOpen(false); // Cierra el modal
+                    setProviderToDelete(null); // Limpia el estado
                     setSuccessMessage("Proveedor eliminado exitosamente");
                 })
                 .catch((error) => {
@@ -551,11 +551,11 @@ const Providers = () => {
                                                 </button>
 
                                                 <button
-                          onClick={() => handleDeleteProvider(provider.idProveedor, provider.nombreProveedor)}
-                          className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
+                                                    onClick={() => handleDeleteProvider(provider.idProveedor, provider.nombreProveedor)}
+                                                    className="text-red-600 hover:text-red-800 transition-colors duration-200"
+                                                >
+                                                    <Trash2 className="w-5 h-5" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -593,9 +593,27 @@ const Providers = () => {
             </main>
 
             {/* Modales */}
-            <ProviderModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} onAddProvider={handleAddProvider} />
-            <ConfirmDeleteModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onConfirmDelete={handleConfirmDelete} providerName={providerToDelete?.name} />
-            <EditProviderModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} provider={providerToEdit} onEditProvider={handleEditProvider} />
+            <ProviderModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAddProvider={handleAddProvider}
+            />
+            <ConfirmDeleteModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                providerName={providerToDelete?.name}
+            />
+            {/* Modal de edición */}
+            {isEditModalOpen && (
+                <EditProviderModal
+                    isOpen={isEditModalOpen} // Puedes mantener esta prop, pero no es necesaria si ya condicionas aquí.
+                    onClose={() => setIsEditModalOpen(false)}
+                    provider={providerToEdit}
+                    onEditProvider={handleEditProvider}
+                />
+            )}
+
         </div>
     );
 };
