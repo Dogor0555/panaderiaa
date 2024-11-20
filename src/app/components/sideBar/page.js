@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Home, Users, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2 } from 'lucide-react';
+import { Home, Users, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2, Tag } from 'lucide-react';
 import Image from 'next/image';
 import logo from '../../images/LogoTipo-Cafe.png';
 
@@ -20,13 +20,31 @@ const Sidebar = () => {
         <div className="p-6">
           <nav>
             <ul className="space-y-6 text-center mt-6">
-              <li><a href="#"><Home className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              {/* Dashboard: Página principal */}
+              <li><a href="/components/dashboard"><Home className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Clientes: Sección de gestión de clientes */}
               <li><a href="/components/clients"><Users className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Carrito: Visualización y gestión de pedidos */}
               <li><a href="#"><ShoppingCart className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Ventas: Gestión de ingresos y ventas */}
               <li><a href="#"><DollarSign className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Proveedores: Gestión de proveedores */}
               <li><a href="/components/proveedores"><Handshake className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Documentos: Manejo de informes o archivos */}
               <li><a href="#"><FileText className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              <li><a href="#"><Grid className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+
+               {/* Inventario: Manejo de Inventario */}
+               <li><a href="#"><Grid className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Categorías: Organización por categorías (Nuevo ícono) */}
+              <li><a href="/components/categorias"><Tag className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              
+              {/* Estadísticas: Análisis y gráficas */}
               <li><a href="#"><BarChart2 className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
             </ul>
           </nav>
