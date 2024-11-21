@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Home, Users, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2, Tag } from 'lucide-react';
+import { Home, Users, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2, Tag, Package } from 'lucide-react'; 
 import Image from 'next/image';
 import logo from '../../images/LogoTipo-Cafe.png';
 
@@ -14,38 +14,91 @@ const Sidebar = () => {
 
       {/* Sidebar siempre visible */}
       <div
-        className="bg-white shadow-lg fixed top-0 left-0 w-35 h-full z-40"
+        className="bg-white shadow-lg fixed top-0 left-0 w-35 h-full z-40" // Cambié el valor de 'w-35' a 'w-48' para hacer la sidebar más ancha
         style={{ paddingTop: '80px' }} // Ajusta si es necesario
       >
         <div className="p-6">
           <nav>
             <ul className="space-y-6 text-center mt-6">
               {/* Dashboard: Página principal */}
-              <li><a href="/components/dashboard"><Home className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Clientes: Sección de gestión de clientes */}
-              <li><a href="/components/clients"><Users className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Carrito: Visualización y gestión de pedidos */}
-              <li><a href="#"><ShoppingCart className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Ventas: Gestión de ingresos y ventas */}
-              <li><a href="#"><DollarSign className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Proveedores: Gestión de proveedores */}
-              <li><a href="/components/proveedores"><Handshake className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Documentos: Manejo de informes o archivos */}
-              <li><a href="#"><FileText className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              <li className="group relative">
+                <a href="/components/dashboard">
+                  <Home className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Dashboard</span>
+              </li>
 
-               {/* Inventario: Manejo de Inventario */}
-               <li><a href="#"><Grid className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Categorías: Organización por categorías (Nuevo ícono) */}
-              <li><a href="/components/categorias"><Tag className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
-              
-              {/* Estadísticas: Análisis y gráficas */}
-              <li><a href="#"><BarChart2 className="w-8 h-8 text-gray-700 hover:text-gray-900" /></a></li>
+              {/* Clientes */}
+              <li className="group relative">
+                <a href="/components/clients">
+                  <Users className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Clientes</span>
+              </li>
+
+              {/* Materia Prima */}
+              <li className="group relative">
+                <a href="/components/materiasPrimas">
+                  <Package className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Materia Prima</span>
+              </li>
+
+              {/* Carrito */}
+              <li className="group relative">
+                <a href="#">
+                  <ShoppingCart className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Carrito</span>
+              </li>
+
+              {/* Ventas */}
+              <li className="group relative">
+                <a href="#">
+                  <DollarSign className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Ventas</span>
+              </li>
+
+              {/* Proveedores */}
+              <li className="group relative">
+                <a href="/components/proveedores">
+                  <Handshake className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Proveedores</span>
+              </li>
+
+              {/* Documentos */}
+              <li className="group relative">
+                <a href="#">
+                  <FileText className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Documentos</span>
+              </li>
+
+              {/* Inventario */}
+              <li className="group relative">
+                <a href="#">
+                  <Grid className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Inventario</span>
+              </li>
+
+              {/* Categorías */}
+              <li className="group relative">
+                <a href="/components/categorias">
+                  <Tag className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Categorías</span>
+              </li>
+
+              {/* Estadísticas */}
+              <li className="group relative">
+                <a href="#">
+                  <BarChart2 className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Estadísticas</span>
+              </li>
             </ul>
           </nav>
         </div>
