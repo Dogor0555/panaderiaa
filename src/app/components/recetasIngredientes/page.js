@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../../components/sideBar/page";
-import { User, Search, Edit, Trash2, Eye, FileText, XCircle } from "lucide-react";
-import { FaUser, FaIdCard, FaEnvelope, FaPhone, FaHome, FaClock, FaTimesCircle, FaSearch } from "react-icons/fa"
+import { User, Search, Edit, Trash2, Eye, FileText, XCircle, Utensils } from "lucide-react";
+import { FaUser, FaEnvelope, FaPhone, FaHome, FaTimesCircle, FaIdCard, FaClock, FaSearch } from "react-icons/fa"
+import { BookOpenIcon } from '@heroicons/react/outline';
+
 
 
 // Modal para Confirmar Eliminación
@@ -52,15 +54,28 @@ const RecetaIngredienteModal = ({ isOpen, onClose, onSubmit, recetas, materiasPr
         cantidad: initialData?.cantidad || ""
     });
 
+    // Efecto para cargar datos cuando se abre en modo edición
     useEffect(() => {
         if (initialData) {
             setFormData({
-                idReceta: initialData.idReceta,
-                idMateriaPrima: initialData.idMateriaPrima,
-                cantidad: initialData.cantidad
+                // Múltiples formas de acceder a los IDs para mayor compatibilidad
+                idReceta: 
+                    initialData.receta?.idReceta || 
+                    initialData.id?.idReceta || 
+                    initialData.idReceta || 
+                    "",
+                idMateriaPrima: 
+                    initialData.materiaPrima?.idMateriaPrima || 
+                    initialData.id?.idMateriaPrima || 
+                    initialData.idMateriaPrima || 
+                    "",
+                cantidad: 
+                    initialData.cantidad || ""
             });
         }
     }, [initialData]);
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -97,21 +112,23 @@ const RecetaIngredienteModal = ({ isOpen, onClose, onSubmit, recetas, materiasPr
                             Receta
                         </label>
                         <select
-                            name="idReceta"
-                            value={formData.idReceta}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-                        >
-                            <option value="">Seleccionar Receta</option>
-                            {recetas.map(receta => (
-                                <option 
-                                    key={receta.idReceta} 
-                                    value={receta.idReceta}
-                                >
-                                    {receta.nombreReceta}
-                                </option>
-                            ))}
-                        </select>
+  name="idReceta"
+  value={formData.idReceta}
+  onChange={handleInputChange}
+  className="..."
+>
+  <option value="">Seleccionar Receta</option>
+  {recetas.map(receta => (
+    <option
+      key={receta.idReceta}
+      value={receta.idReceta}  // Verify this is correct
+    >
+      {receta.nombreReceta}
+    </option>
+  ))}
+</select>
+
+
                     </div>
 
                     <div>
@@ -122,19 +139,22 @@ const RecetaIngredienteModal = ({ isOpen, onClose, onSubmit, recetas, materiasPr
                             name="idMateriaPrima"
                             value={formData.idMateriaPrima}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                            className="..."
                         >
-                            <option value="">Seleccionar Materia Prima</option>
-                            {materiasPrimas.map(materia => (
-                                <option 
-                                    key={materia.idMateriaPrima} 
-                                    value={materia.idMateriaPrima}
+                            <option value="">Seleccionar materia Prima</option>
+                            {materiasPrimas.map(materiasPrimas => (
+                                <option
+                                    key={materiasPrimas.idMateriaPrima}
+                                    value={materiasPrimas.idMateriaPrima}  // Asegúrate de usar el ID correcto
                                 >
-                                    {materia.nombreMateriaPrima}
+                                    {materiasPrimas.nombreMateriaPrima}
                                 </option>
                             ))}
                         </select>
+
+
                     </div>
+
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
@@ -190,8 +210,13 @@ const RecetasIngredientes = () => {
     useEffect(() => {
         fetchRecetas();
         fetchMateriasPrimas();
-        fetchRecetasIngredientes(); 
+        fetchRecetasIngredientes();
     }, []);
+
+    const handleCloseSearchResult = () => {
+        setSearchResult(null);
+    };
+
 
     const fetchRecetas = async () => {
         try {
@@ -204,15 +229,28 @@ const RecetasIngredientes = () => {
     };
 
     const handleSearch = () => {
-        if (!searchId) return;
+        // Check if both idReceta and idMateriaPrima are provided
+        const [idReceta, idMateriaPrima] = searchId.split(',').map(id => id.trim());
+
+        if (!idReceta || !idMateriaPrima) {
+            setErrorMessage("Por favor, ingrese tanto el ID de Receta como el ID de Materia Prima separados por coma");
+            setSearchResult(null);
+            return;
+        }
 
         axios
-            .get(`http://localhost:8080/api/auth/recetas-ingredientes/${searchId}`)
+            .get(`http://localhost:8080/api/auth/recetas-ingredientes/${idReceta}/${idMateriaPrima}`)
             .then((response) => {
                 setSearchResult(response.data);
+                setErrorMessage(null);
             })
             .catch((error) => {
-                console.error("Error al buscar receta:", error);
+                console.error("Error al buscar ingrediente receta:", error);
+                if (error.response && error.response.status === 404) {
+                    setErrorMessage("No se encontró el ingrediente de receta con los IDs proporcionados");
+                } else {
+                    setErrorMessage("Error al buscar ingrediente receta");
+                }
                 setSearchResult(null);
             });
     };
@@ -239,60 +277,236 @@ const RecetasIngredientes = () => {
 
     const handleAddIngrediente = async (data) => {
         try {
+            const payload = {
+                id: {
+                    idReceta: Number(data.idReceta),
+                    idMateriaPrima: Number(data.idMateriaPrima)
+                },
+                receta: {
+                    idReceta: Number(data.idReceta)
+                },
+                materiaPrima: {
+                    idMateriaPrima: Number(data.idMateriaPrima)
+                },
+                cantidad: Number(data.cantidad)
+            };
+    
+            console.log("🚀 PAYLOAD PARA BACKEND:", payload);
+    
             const response = await axios.post(
                 "http://localhost:8080/api/auth/recetas-ingredientes",
-                data
+                payload,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             );
-            setRecetasIngredientes(prev => [...prev, response.data]);
+    
+            console.log("🎉 RESPUESTA DEL SERVIDOR:", response.data);
+    
+            // Actualización del estado más robusta
+            setRecetasIngredientes(prevItems => {
+                // Verificar si el elemento ya existe para evitar duplicados
+                const existingItemIndex = prevItems.findIndex(
+                    item =>
+                        item.id.idReceta === response.data.id.idReceta &&
+                        item.id.idMateriaPrima === response.data.id.idMateriaPrima
+                );
+    
+                if (existingItemIndex !== -1) {
+                    // Si existe, actualizar el elemento existente
+                    const updatedItems = [...prevItems];
+                    updatedItems[existingItemIndex] = response.data;
+                    return updatedItems;
+                } else {
+                    // Si no existe, agregar nuevo elemento
+                    return [...prevItems, response.data];
+                }
+            });
+    
             setSuccessMessage("Ingrediente agregado exitosamente");
             setIsModalOpen(false);
         } catch (error) {
-            console.error("Error al agregar ingrediente:", error);
-            setErrorMessage("Error al agregar ingrediente");
+            console.error("❌ ERROR COMPLETO AL AGREGAR:", error);
+            
+            if (error.response) {
+                console.error("Respuesta del servidor:", error.response.data);
+                console.error("Código de estado:", error.response.status);
+                
+                const errorMsg = error.response.data.message || 
+                                 error.response.data.error || 
+                                 'No se pudo agregar el ingrediente';
+                
+                setErrorMessage(errorMsg);
+            } else if (error.request) {
+                console.error("Sin respuesta del servidor:", error.request);
+                setErrorMessage("No se recibió respuesta del servidor");
+            } else {
+                console.error("Error de configuración:", error.message);
+                setErrorMessage("Error en la configuración de la solicitud");
+            }
         }
     };
 
     const handleEditIngrediente = async (data) => {
         try {
+            const payload = {
+                id: {
+                    idReceta: Number(data.idReceta),
+                    idMateriaPrima: Number(data.idMateriaPrima)
+                },
+                receta: {
+                    idReceta: Number(data.idReceta)
+                },
+                materiaPrima: {
+                    idMateriaPrima: Number(data.idMateriaPrima)
+                },
+                cantidad: Number(data.cantidad)
+            };
+    
+            console.log("🚀 PAYLOAD PARA EDITAR BACKEND:", payload);
+    
             const response = await axios.put(
-                "http://localhost:8080/api/auth/recetas-ingredientes",
-                data
+                `http://localhost:8080/api/auth/recetas-ingredientes/${data.idReceta}/${data.idMateriaPrima}`,
+                payload,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             );
-            setRecetasIngredientes(prev =>
-                prev.map(item =>
-                    (item.idReceta === data.idReceta && item.idMateriaPrima === data.idMateriaPrima)
-                        ? response.data
-                        : item
-                )
-            );
-            setSuccessMessage("Ingrediente actualizado exitosamente");
+    
+            console.log("🎉 RESPUESTA DEL SERVIDOR AL EDITAR:", response.data);
+    
+            // Actualización del estado más robusta
+            setRecetasIngredientes(prevItems => {
+                // Encontrar el índice del item a editar
+                const editedItemIndex = prevItems.findIndex(
+                    item =>
+                        item.id.idReceta === response.data.id.idReceta &&
+                        item.id.idMateriaPrima === response.data.id.idMateriaPrima
+                );
+    
+                if (editedItemIndex !== -1) {
+                    // Crear una nueva copia del array con el item actualizado
+                    const updatedItems = [...prevItems];
+                    updatedItems[editedItemIndex] = response.data;
+                    return updatedItems;
+                }
+    
+                // Si por alguna razón no se encuentra, devolver el estado previo
+                return prevItems;
+            });
+    
+            setSuccessMessage("Ingrediente editado exitosamente");
             setIsEditModalOpen(false);
         } catch (error) {
-            console.error("Error al actualizar ingrediente:", error);
-            setErrorMessage("Error al actualizar ingrediente");
+            console.error("❌ ERROR COMPLETO AL EDITAR:", error);
+    
+            if (error.response) {
+                console.error("Respuesta del servidor:", error.response.data);
+                console.error("Código de estado:", error.response.status);
+    
+                const errorMsg = error.response.data.message ||
+                    error.response.data.error ||
+                    'No se pudo editar el ingrediente';
+    
+                setErrorMessage(errorMsg);
+            } else if (error.request) {
+                console.error("Sin respuesta del servidor:", error.request);
+                setErrorMessage("No se recibió respuesta del servidor");
+            } else {
+                console.error("Error de configuración:", error.message);
+                setErrorMessage("Error en la configuración de la solicitud");
+            }
+        }
+    }; 
+
+    const handleDeleteIngrediente = async () => {
+        // Extreme defensive programming
+        if (!itemToDelete) {
+            console.error("❌ NO HAY ITEM PARA ELIMINAR");
+            setErrorMessage("No se seleccionó ningún elemento para eliminar");
+            setDeleteModalOpen(false);
+            return;
+        }
+
+        // Detailed logging
+        console.log("🔍 INTENTANDO ELIMINAR:", {
+            fullItem: itemToDelete,
+            idReceta: itemToDelete.idReceta,
+            idMateriaPrima: itemToDelete.idMateriaPrima
+        });
+
+        try {
+            // Explicitly verify values
+            const recetaId = itemToDelete.idReceta;
+            const materiaPrimaId = itemToDelete.idMateriaPrima;
+
+            if (!recetaId || !materiaPrimaId) {
+                console.error("❌ IDS INVÁLIDOS:", { recetaId, materiaPrimaId });
+                setErrorMessage("IDs de receta o materia prima no válidos");
+                setDeleteModalOpen(false);
+                return;
+            }
+
+            const response = await axios.delete(
+                `http://localhost:8080/api/auth/recetas-ingredientes/${recetaId}/${materiaPrimaId}`,
+                {
+                    // Configura explícitamente los headers si es necesario
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            console.log("✅ RESPUESTA DE ELIMINACIÓN:", response);
+
+            // Actualización más robusta del estado
+            setRecetasIngredientes(prevItems =>
+                prevItems.filter(item =>
+                    !(item.idReceta === recetaId && item.idMateriaPrima === materiaPrimaId)
+                )
+            );
+
+            setSuccessMessage("Ingrediente eliminado exitosamente");
+            setDeleteModalOpen(false);
+            setItemToDelete(null);  // Limpia el item después de eliminar
+
+        } catch (error) {
+            console.error("❌ ERROR COMPLETO DE ELIMINACIÓN:", error);
+
+            // Manejo de errores más detallado
+            if (error.response) {
+                // El servidor respondió con un estado de error
+                console.error("Respuesta del servidor:", error.response.data);
+                console.error("Código de estado:", error.response.status);
+                setErrorMessage(`Error del servidor: ${error.response.data.message || 'No se pudo eliminar'}`);
+            } else if (error.request) {
+                // La solicitud fue hecha pero no se recibió respuesta
+                console.error("Sin respuesta del servidor:", error.request);
+                setErrorMessage("No se recibió respuesta del servidor");
+            } else {
+                // Algo sucedió al configurar la solicitud
+                console.error("Error de configuración:", error.message);
+                setErrorMessage("Error en la configuración de la solicitud");
+            }
+
+            setDeleteModalOpen(false);
         }
     };
 
-    const handleDeleteIngrediente = async () => {
-        if (itemToDelete) {
-            try {
-                await axios.delete(
-                    `http://localhost:8080/api/auth/recetas-ingredientes/${itemToDelete.idReceta}/${itemToDelete.idMateriaPrima}`
-                );
-                setRecetasIngredientes(prev =>
-                    prev.filter(item =>
-                        !(item.idReceta === itemToDelete.idReceta && 
-                          item.idMateriaPrima === itemToDelete.idMateriaPrima)
-                    )
-                );
-                setSuccessMessage("Ingrediente eliminado exitosamente");
-                setDeleteModalOpen(false);
-            } catch (error) {
-                console.error("Error al eliminar ingrediente:", error);
-                setErrorMessage("Error al eliminar ingrediente");
-            }
+    useEffect(() => {
+        if (successMessage || errorMessage) {
+            const timer = setTimeout(() => {
+                setSuccessMessage(null);
+                setErrorMessage(null);
+            }, 5000);
+
+            return () => clearTimeout(timer);
         }
-    };
+    }, [successMessage, errorMessage]);
 
     const downloadReport = () => {
         axios({
@@ -332,14 +546,14 @@ const RecetasIngredientes = () => {
             <main className="flex-1 ml-16 bg-white">
                 <div className="p-6">
                     <header className="text-black flex justify-between items-center mb-6">
-                    <div className="text-xl font-semibold">Recetas de Ingredientes</div>
-                         <div className="flex items-center space-x-6">
+                        <div className="text-xl font-semibold">Recetas de Ingredientes</div>
+                        <div className="flex items-center space-x-6">
                             <input
                                 type="text"
-                                placeholder="Buscar Receta por ID..."
+                                placeholder="Buscar: ID Receta, ID Materia Prima"
                                 value={searchId}
                                 onChange={(e) => setSearchId(e.target.value)}
-                                className="p-2 rounded-md border w-48 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="p-2 rounded-md border w-64 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <button
                                 onClick={handleSearch}
@@ -378,38 +592,40 @@ const RecetasIngredientes = () => {
                             {/* Header */}
                             <div className="flex justify-between items-center mb-4 pb-3 border-b border-black">
                                 <h3 className="text-black text-xl font-semibold flex items-center gap-2">
-                                    <FaSearch className="text-blue-500" />
+                                    <Search className="text-blue-500" />
                                     Resultado de la Búsqueda
                                 </h3>
                                 <button
-                                    onClick={handleCloseSearchResult}
+                                    onClick={() => setSearchResult(null)}
                                     className="text-red-500 hover:text-red-700 transition-colors duration-200"
                                 >
-                                    <FaTimesCircle className="w-5 h-5" />
+                                    <XCircle className="w-5 h-5" />
                                 </button>
                             </div>
 
                             {/* Content in two columns */}
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-gray-800">
+
+
                                 <div className="flex items-center gap-2">
-                                    <FaUser className="text-gray-600" />
+                                    <BookOpenIcon className="text-gray-600 w-5 h-5" />
                                     <p className="text-sm">
-                                        <strong>ID:</strong>{" "}
-                                        <span className="font-medium">{searchResult.idReceta}</span>
+                                        <strong>Nombre Receta:</strong>{" "}
+                                        <span className="font-medium">{searchResult.receta?.nombreReceta || 'N/A'}</span>
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaUser className="text-gray-600" />
+                                    <Utensils className="text-gray-600 w-5 h-5" />
                                     <p className="text-sm">
-                                        <strong>Nombre:</strong>{" "}
-                                        <span className="font-medium">{searchResult.nombreReceta}</span>
+                                        <strong>Nombre Materia Prima:</strong>{" "}
+                                        <span className="font-medium">{searchResult.materiaPrima?.nombreMateriaPrima || 'N/A'}</span>
                                     </p>
                                 </div>
                                 <div className="col-span-2 flex items-center gap-2">
-                                    <FaUser className="text-gray-600" />
+                                    <FaClock className="text-gray-600 w-5 h-5" />
                                     <p className="text-sm">
-                                        <strong>Descripción:</strong>{" "}
-                                        <span className="font-medium">{searchResult.descripcion}</span>
+                                        <strong>Cantidad:</strong>{" "}
+                                        <span className="font-medium">{searchResult.cantidad}</span>
                                     </p>
                                 </div>
                             </div>
@@ -427,10 +643,13 @@ const RecetasIngredientes = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {currentItems.map((item) => (
-                                    <tr key={`${item.idReceta}-${item.idMateriaPrima}`} className="hover:bg-gray-50 transition duration-200">
-                                        <td className="py-3 px-4 text-gray-800">{item.receta.nombreReceta}</td>
-                                        <td className="py-3 px-4 text-gray-800">{item.materiaPrima.nombreMateriaPrima}</td>
+                                {currentItems.map((item, index) => (
+                                    <tr
+                                        key={`${item.idReceta || 'no-receta'}-${item.idMateriaPrima || 'no-materia'}-${index}`}
+                                        className="hover:bg-gray-50 transition duration-200"
+                                    >
+                                        <td className="py-3 px-4 text-gray-800">{item.receta?.nombreReceta || 'N/A'}</td>
+                                        <td className="py-3 px-4 text-gray-800">{item.materiaPrima?.nombreMateriaPrima || 'N/A'}</td>
                                         <td className="py-3 px-4 text-gray-800">{item.cantidad}</td>
                                         <td className="py-3 px-4">
                                             <div className="flex space-x-3">
@@ -446,7 +665,17 @@ const RecetasIngredientes = () => {
 
                                                 <button
                                                     onClick={() => {
-                                                        setItemToDelete(item);
+                                                        console.log("🎯 BOTÓN DE ELIMINAR CLICKEADO:", item);
+
+                                                        // Asegúrate de que los IDs sean tratados consistentemente
+                                                        const deleteItem = {
+                                                            idReceta: item.receta?.idReceta,  // Acceso más seguro
+                                                            idMateriaPrima: item.materiaPrima?.idMateriaPrima  // Acceso más seguro
+                                                        };
+
+                                                        console.log("🔑 ITEM A ELIMINAR:", deleteItem);
+
+                                                        setItemToDelete(deleteItem);
                                                         setDeleteModalOpen(true);
                                                     }}
                                                     className="text-red-600 hover:text-red-800 transition-colors duration-200"
@@ -516,12 +745,12 @@ const RecetasIngredientes = () => {
                 onConfirm={handleDeleteIngrediente}
                 recetaId={itemToDelete?.idReceta}
                 materiaId={itemToDelete?.idMateriaPrima}
-                />
-            </div>
-        
+            />
+        </div>
+
     );
 };
 
 export default RecetasIngredientes;
 
-    
+

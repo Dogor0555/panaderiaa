@@ -66,7 +66,7 @@ const Sidebar = () => {
 
               {/* Ventas */}
               <li className="group relative">
-                <a href="#">
+                <a href="/components/ventas">
                   <DollarSign className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
                 </a>
                 <span className="tooltip">Ventas</span>
@@ -90,7 +90,7 @@ const Sidebar = () => {
 
               {/* Inventario */}
               <li className="group relative">
-                <a href="#">
+                <a href="/components/inventario">
                   <Grid className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
                 </a>
                 <span className="tooltip">Inventario</span>
@@ -104,13 +104,7 @@ const Sidebar = () => {
                 <span className="tooltip">Categorías</span>
               </li>
 
-              {/* Estadísticas */}
-              <li className="group relative">
-                <a href="#">
-                  <BarChart2 className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
-                </a>
-                <span className="tooltip">Estadísticas</span>
-              </li>
+              
 
                {/* Recetas */}
                <li className="group relative">
@@ -120,7 +114,7 @@ const Sidebar = () => {
                 <span className="tooltip">Recetas</span>
               </li>
 
-               {/* Recetas */}
+               {/* Ingrediente Recetas */}
                <li className="group relative">
   <a href="/components/recetasIngredientes">
     <BookOpenIcon className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
