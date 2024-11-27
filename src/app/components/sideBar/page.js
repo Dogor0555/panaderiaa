@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Home, Users, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2, Tag, Package, Utensils } from 'lucide-react'; 
+import { Home, Users, Info, ShoppingCart, DollarSign, Handshake, FileText, Grid, BarChart2, Tag, Package, Utensils } from 'lucide-react';
 import { GiBread } from 'react-icons/gi';
 import { BookOpenIcon } from '@heroicons/react/outline';
 
@@ -49,20 +49,14 @@ const Sidebar = () => {
               </li>
 
               <li className="group relative">
-  <a href="/components/productos">
-    <GiBread  className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
-  </a>
-  <span className="tooltip">Productos</span>
-</li>
-
-
-              {/* Carrito */}
-              <li className="group relative">
-                <a href="#">
-                  <ShoppingCart className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                <a href="/components/productos">
+                  <GiBread className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
                 </a>
-                <span className="tooltip">Carrito</span>
+                <span className="tooltip">Productos</span>
               </li>
+
+
+
 
               {/* Ventas */}
               <li className="group relative">
@@ -104,23 +98,34 @@ const Sidebar = () => {
                 <span className="tooltip">Categorías</span>
               </li>
 
-              
 
-               {/* Recetas */}
-               <li className="group relative">
+
+              {/* Recetas */}
+              <li className="group relative">
                 <a href="/components/recetas">
                   <Utensils className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
                 </a>
                 <span className="tooltip">Recetas</span>
               </li>
 
-               {/* Ingrediente Recetas */}
-               <li className="group relative">
-  <a href="/components/recetasIngredientes">
-    <BookOpenIcon className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
-  </a>
-  <span className="tooltip">Recetas Ingredientes</span>
-</li>
+
+
+              {/* Ingrediente Recetas */}
+              <li className="group relative">
+                <a href="/components/recetasIngredientes">
+                  <BookOpenIcon className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Recetas Ingredientes</span>
+              </li>
+
+              {/* Acerca De */}
+              <li className="group relative">
+                <a href="/components/acercaDe">
+                  <Info className="w-8 h-8 text-gray-700 hover:text-gray-900 transition-transform transform group-hover:scale-110" />
+                </a>
+                <span className="tooltip">Acerca De</span>
+              </li>
+
 
             </ul>
           </nav>
